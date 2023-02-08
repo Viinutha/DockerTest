@@ -1,0 +1,40 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.8'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'com.palantir.docker' version '0.33.0'
+}
+
+group = 'com.vinutha.DockerTest'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+//docker{
+//	name "mycoolapp"
+//	dockerfile file('src/docker/Dockerfile')
+//	copySpec.from(jar).rename(".*","app.jar")
+//	buildArgs(['JAR_FILE':"app.jar"])
+//}
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+//springBoot {
+//	mainClass = "com.vinutha.DockerTest.DockerTest.DockerTestApplication"
+//}
+jar {
+	manifest {
+		attributes(
+				'Class-Path': configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
+				'Main-Class': 'com.vinutha.DockerTest.DockerTest.DockerTestApplication'
+		)
+	}
+}
